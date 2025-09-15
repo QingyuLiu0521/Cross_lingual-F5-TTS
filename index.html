@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="generator" content="Hugo 0.88.1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href=""https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+	<link rel="stylesheet" href="css/custom.css">
+	<link rel="stylesheet" href="css/normalize.css">
+
+	<title>Cross-Lingual F5-TTS</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+
+<body data-new-gr-c-s-check-loaded="14.1091.0" data-gr-ext-installed="">
+
+<div class="container" >
+<header role="banner">
+</header>
+<main role="main">
+<article itemscope itemtype="https://schema.org/BlogPosting">
+
+<div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
+	<div class="text-center">
+	<h2 style="display: flex; align-items: center; justify-content: center">
+		Cross-Lingual F5-TTS <span style="margin-left: 10px;"></span> 
+	</h2>
+      <h3>Towards Language-Agnostic Voice Cloning and Speech Synthesis</h3>
+	</div>
+	<p><b>Abstract</b> Flow-matching-based text-to-speech (TTS) models have shown high-quality speech synthesis. However, most current flow-matching-based TTS models still rely on a reference transcript corresponding to the audio prompt for synthesis. This dependency prevents cross-lingual voice cloning as the reference transcript is unavailable when the prompt and target languages differ, particularly for unseen languages. The key challenges for flow-matching-based TTS models to remove audio prompt transcripts are identifying word boundaries during training and determining appropriate duration during inference. In this paper, we introduce Cross-Lingual F5-TTS, a framework that enables cross-lingual voice cloning without audio prompt transcripts. Our method preprocesses audio prompts by forced alignment to obtain word boundaries, enabling direct synthesis from audio prompts while excluding transcripts during training. To address the duration modeling challenge, we train speaking rate predictors at different linguistic granularities to derive duration from speaker pace. Experiments demonstrate that our approach maintains competitive performance while extending cross-lingual voice cloning capabilities.
+	</p>
+
+	<p>
+	<b>Contents</b>
+      <ul>
+        <li><a href="#method-overview">Method Overview</a></li>
+        <li><a href="#intralingual-zero-shot">Intra-Lingual Zero-shot Generation</a></li>
+        <li><a href="#crosslingual-zero-shot">Cross-Lingual Zero-shot Generation</a></li>
+      </ul>
+	</p>
+
+	<p><b>This page is for research demonstration purposes only.</b></p>
+
+	
+</div>
+ 
+
+<div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">		
+	<h2 id="method-overview" style="text-align: center;">Method Overview</h2>
+	
+	<!-- Method Overview 部分 -->
+	<h3 style="margin-top: 30px;">Training Framework</h3>
+	<p style="text-align: center;">
+		<img src="figs/tts.png" width="700">
+	</p>
+	<p style="text-align: left;">
+		<b>Figure 1</b>: Training framework of Cross-Lingual F5-TTS. MMS forced alignment produces word boundaries for training data, where the left segment serves as transcript-free audio prompt and the mel spectrogram of the right segment is masked for prediction.
+	</p>
+
+	<!-- Speaking Rate Predictor Architecture 部分 -->
+	<h3 style="margin-top: 40px;">Architecture of Speaking Rate Predictor</h3>
+	<p style="text-align: center;">
+		<img src="figs/sp.png" width="700">
+	</p>
+	<p style="text-align: left;">
+		<b>Figure 2</b>: Architecture of the speaking rate predictor. The model predicts discrete rate categories from mel-spectrograms, while ground truth rates are mapped to nearest categories for GCE loss computation.
+	</p>
+</div>
+
+<div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
+    <h2 id="#intralingual-zero-shot" style="text-align: center;">Intra-Lingual Zero-shot Generation</h2>
+    <p>Prompt and text from the demo page of <a href="https://bytedancespeech.github.io/seedtts_tech_report/#full-diffusion-samples" target="_blank" rel="noopener noreferrer">Seed-TTS</a>.</p>
+    <div class="table-responsive pt-3">
+        <table class="table table-hover pt-2">
+            <thead>
+                <tr>
+                    <th style="vertical-align: middle; text-align: center">Language</th>
+                    <th style="vertical-align: middle; text-align: center">Audio Prompt</th>
+                    <th style="vertical-align: middle; text-align: center">Text to Generate</th>
+                    <th style="vertical-align: middle; text-align: center">Cross-Lingual F5-TTS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Example Row 1 -->
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;" rowspan="3">EN</td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/zero_shot/seedtts_ref_en_1.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        I don't really care what you call me. I've been a silent spectator, watching species evolve, empires rise and fall. But always remember, I am mighty and enduring.
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/zero_shot/seedtts_gen_en_1_nfe7_epss.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <!-- Example Row 2 -->
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/zero_shot/seedtts_ref_en_2.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        Perhaps they are driven by the delicious blend of flavors, or it could be the appealing visual presentation. At the end of the day, our choices in food reflect our personal preferences and sometimes, even our lifestyle or belief system.
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/zero_shot/seedtts_gen_en_2_nfe7_epss.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <!-- Example Row 3 -->
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/zero_shot/seedtts_ref_en_3.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        Your safety and the pack's reputation are at stake. Your bravery is admirable, but sometimes bravery is knowing when to retreat. Please, consider returning with me. We can work out a plan, but only if you're willing to listen.
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/zero_shot/seedtts_gen_en_3_nfe7_epss.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <!-- Example Row 4 -->
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;" rowspan="3">ZH</td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/zero_shot/seedtts_ref_zh_1.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        突然，身边一阵笑声。我看着他们，意气风发地挺直了胸膛，甩了甩那稍显肉感的双臂，轻笑道："我身上的肉，是为了掩饰我爆棚的魅力，否则，岂不吓坏了你们呢？"
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/zero_shot/seedtts_gen_zh_1_nfe7_epss.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <!-- Example Row 5 -->
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/zero_shot/seedtts_ref_zh_2.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        顿时，气氛变得沉郁起来。乍看之下，一切的困扰仿佛都围绕在我身边。我皱着眉头，感受着那份压力，但我知道我不能放弃，不能认输。于是，我深吸一口气，心底的声音告诉我："无论如何，都要冷静下来，重新开始。"
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/zero_shot/seedtts_gen_zh_2_nfe7_epss.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <!-- Example Row 6 -->
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/zero_shot/seedtts_ref_zh_3.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        皇上的面色未变，宛如雕塑般静止，他的眼中闪过一丝动人的温度。他深深地看了那位忠心耿耿的臣子一眼，终于开口："诺，我会再考虑考虑的。"他的声音低沉且坚定，留下空气中隐隐的无奈与柔情。
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/zero_shot/seedtts_gen_zh_3_nfe7_epss.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+</div>
+
+
+<div class="container pt-5 mt-5 shadow-lg p-5 mb-5 bg-white rounded">
+    <h2 id="#crosslingual-zero-shot" style="text-align: center;">Cross-Lingual Zero-shot Generation</h2>
+    <p>Prompt from <a href="https://huggingface.co/datasets/google/fleurs" target="_blank" rel="noopener noreferrer">FLEURS</a> dataset. Each prompt is used to generate speech in both Chinese and English target languages.</p>
+    <div class="table-responsive pt-3">
+        <table class="table table-hover pt-2">
+            <thead>
+                <tr>
+                    <th style="vertical-align: middle; text-align: center">Prompt Language</th>
+                    <th style="vertical-align: middle; text-align: center">Audio Prompt</th>
+                    <th style="vertical-align: middle; text-align: center">Target Language</th>
+                    <th style="vertical-align: middle; text-align: center">Text to Generate</th>
+                    <th style="vertical-align: middle; text-align: center">Cross-Lingual F5-TTS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- German Prompt -->
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;" rowspan="2">German</td>
+                    <td style="vertical-align: middle; text-align: center;" rowspan="2">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/cross_lingual/fleurs_ref_de.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">Chinese</td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        这是一个跨语言语音合成的演示，展示了从德语提示生成中文语音的能力。
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/cross_lingual/fleurs_gen_de_to_zh.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;">English</td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        This is a demonstration of cross-lingual speech synthesis, showing the ability to generate English speech from German prompts.
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/cross_lingual/fleurs_gen_de_to_en.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+
+                <!-- French Prompt -->
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;" rowspan="2">French</td>
+                    <td style="vertical-align: middle; text-align: center;" rowspan="2">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/cross_lingual/fleurs_ref_fr.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">Chinese</td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        法语提示可以成功地克隆说话者的声音特征，并生成高质量的中文语音。
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/cross_lingual/fleurs_gen_fr_to_zh.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;">English</td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        French prompts can successfully clone speaker characteristics and generate high-quality English speech output.
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/cross_lingual/fleurs_gen_fr_to_en.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+
+                <!-- Hindi Prompt -->
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;" rowspan="2">Hindi</td>
+                    <td style="vertical-align: middle; text-align: center;" rowspan="2">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/cross_lingual/fleurs_ref_hi.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">Chinese</td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        印地语音频提示展现了模型在处理不同语言族系时的鲁棒性和适应能力。
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/cross_lingual/fleurs_gen_hi_to_zh.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;">English</td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        Hindi audio prompts demonstrate the model's robustness and adaptability when handling different language families.
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/cross_lingual/fleurs_gen_hi_to_en.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+
+                <!-- Korean Prompt -->
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;" rowspan="2">Korean</td>
+                    <td style="vertical-align: middle; text-align: center;" rowspan="2">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/cross_lingual/fleurs_ref_ko.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">Chinese</td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        韩语提示音频能够有效地传递说话者的音色特征到目标中文语音合成中。
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/cross_lingual/fleurs_gen_ko_to_zh.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: middle; text-align: center;">English</td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        Korean prompt audio effectively transfers speaker timbre characteristics to target English speech synthesis.
+                    </td>
+                    <td style="vertical-align: middle; text-align: center;">
+                        <audio controls style="width: 190px;">
+                            <source src="audios/cross_lingual/fleurs_gen_ko_to_en.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+</div>
+
+</article>
+</main>
+</div>
+
+</body>
+</html>

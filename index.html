@@ -30,8 +30,9 @@
 		Cross-Lingual F5-TTS <span style="margin-left: 10px;"></span> 
 	</h2>
       <h3>Towards Language-Agnostic Voice Cloning and Speech Synthesis</h3>
+      <h5> <a href="https://arxiv.org/abs/2509.14579" target="_blank" rel="noopener noreferrer">Paper</a>; <a href="#" target="_blank" rel="noopener noreferrer">Hugging Face</a> </h5>
 	</div>
-	<p><b>Abstract</b> Flow-matching-based text-to-speech (TTS) models have shown high-quality speech synthesis. However, most current flow-matching-based TTS models still rely on a reference transcript corresponding to the audio prompt for synthesis. This dependency prevents cross-lingual voice cloning as the reference transcript is unavailable when the prompt and target languages differ, particularly for unseen languages. The key challenges for flow-matching-based TTS models to remove audio prompt transcripts are identifying word boundaries during training and determining appropriate duration during inference. In this paper, we introduce Cross-Lingual F5-TTS, a framework that enables cross-lingual voice cloning without audio prompt transcripts. Our method preprocesses audio prompts by forced alignment to obtain word boundaries, enabling direct synthesis from audio prompts while excluding transcripts during training. To address the duration modeling challenge, we train speaking rate predictors at different linguistic granularities to derive duration from speaker pace. Experiments demonstrate that our approach maintains competitive performance while extending cross-lingual voice cloning capabilities.
+	<p><b>Abstract</b> Flow-matching-based text-to-speech (TTS) models have shown high-quality speech synthesis. However, most current flow-matching-based TTS models still rely on reference transcripts corresponding to the audio prompt for synthesis. This dependency prevents cross-lingual voice cloning when audio prompt transcripts are unavailable, particularly for unseen languages. The key challenges for flow-matching-based TTS models to remove audio prompt transcripts are identifying word boundaries during training and determining appropriate duration during inference. In this paper, we introduce Cross-Lingual F5-TTS, a framework that enables cross-lingual voice cloning without audio prompt transcripts. Our method preprocesses audio prompts by forced alignment to obtain word boundaries, enabling direct synthesis from audio prompts while excluding transcripts during training. To address the duration modeling challenge, we train speaking rate predictors at different linguistic granularities to derive duration from speaker pace. Experiments show that our approach matches the performance of F5-TTS while enabling cross-lingual voice cloning.
 	</p>
 
 	<p>
@@ -67,7 +68,7 @@
 		<img src="figs/sp.png" width="700">
 	</p>
 	<p style="text-align: left;">
-		<b>Figure 2</b>: Architecture of the speaking rate predictor. The model predicts discrete rate categories from mel-spectrograms, while ground truth rates are mapped to nearest categories for GCE loss computation.
+		<b>Figure 2</b>: Training pipeline of the speaking rate predictor. The model predicts discrete rate categories from mel-spectrograms, while ground truth speaking rates are mapped to nearest categories for GCE loss computation.
 	</p>
 </div>
 
@@ -228,7 +229,7 @@
                     </td>
                     <td style="vertical-align: middle; text-align: center;">Chinese</td>
                     <td style="vertical-align: middle; text-align: center;">
-                        这是一个跨语言语音合成的演示，展示了从德语提示生成中文语音的能力。
+                        产品经理，其实是随着互联网发展应运而生的。
                     </td>
                     <td style="vertical-align: middle; text-align: center;">
                         <audio controls style="width: 190px;">
@@ -240,8 +241,7 @@
                 <tr>
                     <td style="vertical-align: middle; text-align: center;">English</td>
                     <td style="vertical-align: middle; text-align: center;">
-                        This is a demonstration of cross-lingual speech synthesis, showing the ability to generate English speech from German prompts.
-                    </td>
+                        They were voyaging across the deserts of the sky a host of nomads on the march voyaging high over ireland westward bound.
                     <td style="vertical-align: middle; text-align: center;">
                         <audio controls style="width: 190px;">
                             <source src="audios/cross_lingual/fleurs_gen_de_to_en.wav" type="audio/wav">
@@ -261,7 +261,7 @@
                     </td>
                     <td style="vertical-align: middle; text-align: center;">Chinese</td>
                     <td style="vertical-align: middle; text-align: center;">
-                        法语提示可以成功地克隆说话者的声音特征，并生成高质量的中文语音。
+                        眨眼工夫，几个混混亮明警察身份，一瞬间将其将张某制服。
                     </td>
                     <td style="vertical-align: middle; text-align: center;">
                         <audio controls style="width: 190px;">
@@ -273,7 +273,7 @@
                 <tr>
                     <td style="vertical-align: middle; text-align: center;">English</td>
                     <td style="vertical-align: middle; text-align: center;">
-                        French prompts can successfully clone speaker characteristics and generate high-quality English speech output.
+                        If ever he was impelled to cast sin from him and to repent the impulse that moved him was the wish to be her knight.
                     </td>
                     <td style="vertical-align: middle; text-align: center;">
                         <audio controls style="width: 190px;">
@@ -294,7 +294,7 @@
                     </td>
                     <td style="vertical-align: middle; text-align: center;">Chinese</td>
                     <td style="vertical-align: middle; text-align: center;">
-                        印地语音频提示展现了模型在处理不同语言族系时的鲁棒性和适应能力。
+                        真不好意思，从小至今，他还从来没有被哪一位异性朋友亲吻过呢。
                     </td>
                     <td style="vertical-align: middle; text-align: center;">
                         <audio controls style="width: 190px;">
@@ -306,7 +306,7 @@
                 <tr>
                     <td style="vertical-align: middle; text-align: center;">English</td>
                     <td style="vertical-align: middle; text-align: center;">
-                        Hindi audio prompts demonstrate the model's robustness and adaptability when handling different language families.
+                        The music came nearer and he recalled the words the words of shelley's fragment upon the moon wandering companionless pale for weariness.
                     </td>
                     <td style="vertical-align: middle; text-align: center;">
                         <audio controls style="width: 190px;">
@@ -327,7 +327,7 @@
                     </td>
                     <td style="vertical-align: middle; text-align: center;">Chinese</td>
                     <td style="vertical-align: middle; text-align: center;">
-                        韩语提示音频能够有效地传递说话者的音色特征到目标中文语音合成中。
+                        沉寂了好一阵，这时爱丽丝只能偶尔听到几句微弱的语音，如。
                     </td>
                     <td style="vertical-align: middle; text-align: center;">
                         <audio controls style="width: 190px;">
@@ -339,7 +339,7 @@
                 <tr>
                     <td style="vertical-align: middle; text-align: center;">English</td>
                     <td style="vertical-align: middle; text-align: center;">
-                        Korean prompt audio effectively transfers speaker timbre characteristics to target English speech synthesis.
+                        The retreat will begin on wednesday afternoon in honour of saint francis xavier whose feast day is saturday.
                     </td>
                     <td style="vertical-align: middle; text-align: center;">
                         <audio controls style="width: 190px;">
